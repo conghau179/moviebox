@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MovieBox</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}
+header{padding:16px;background:#111;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:bold;color:#e50914}
+.container{max-width:1100px;margin:auto;padding:20px}
+.search{width:100%;padding:14px;border:0;border-radius:8px;background:#222;color:white;font-size:16px;margin-bottom:20px}
+.hero{padding:30px 20px;border-radius:12px;background:linear-gradient(90deg,#222,#111);margin-bottom:25px}
+.hero h1{font-size:30px;margin:0 0 10px}
+.hero p{color:#bbb}
+.movies{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.card{background:#151515;border-radius:10px;overflow:hidden}
+.card img{width:100%;height:240px;object-fit:cover}
+.info{padding:12px}
+.title{font-size:17px;font-weight:bold;margin-bottom:10px}
+button{border:0;border-radius:6px;padding:10px 14px;background:#e50914;color:white;font-weight:bold}
+.watch{width:100%}
+.empty{text-align:center;color:#777;padding:50px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:10;padding:20px;overflow:auto}
+.box{max-width:700px;margin:30px auto;background:#151515;padding:20px;border-radius:10px}
+video{width:100%;background:#000}
+.close{background:#444;margin-top:12px}
+@media(min-width:650px){.movies{grid-template-columns:repeat(4,1fr)}.card img{height:280px}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">MOVIEBOX</div>
+</header>
+
+<div class="container">
+
+<div class="hero">
+<h1>🎬 MovieBox</h1>
+<p>Kho phim riêng của bạn</p>
+</div>
+
+<input class="search" id="search" placeholder="🔎 Tìm kiếm phim..." oninput="showMovies()">
+
+<div id="movies" class="movies"></div>
+
+</div>
+
+<div id="modal" class="modal">
+<div class="box">
+<h2 id="movieTitle"></h2>
+<video id="video" controls></video>
+<button class="close" onclick="closeMovie()">Đóng</button>
+</div>
+</div>
+
+<script>
+
+const movies=[
+{
+name:"Phim mẫu",
+poster:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80",
+video:""
+}
+];
+
+function showMovies(){
+
+let box=document.getElementById("movies");
+let keyword=document.getElementById("search").value.toLowerCase();
+
+let list=movies.filter(x=>x.name.toLowerCase().includes(keyword));
+
+box.innerHTML="";
+
+if(list.length===0){
+box.innerHTML='<div class="empty">Không tìm thấy phim</div>';
+return;
+}
+
+list.forEach((movie,index)=>{
+
+box.innerHTML+=`
+<div class="card">
+<img src="${movie.poster}">
+<div class="info">
+<div class="title">${movie.name}</div>
+<button class="watch" onclick="watch(${index})">▶ Xem phim</button>
+</div>
+</div>
+`;
+
+});
+
+}
+
+function watch(index){
+
+let movie=movies[index];
+
+document.getElementById("movieTitle").innerText=movie.name;
+
+let video=document.getElementById("video");
+video.src=movie.video;
+
+document.getElementById("modal").style.display="block";
+
+}
+
+function closeMovie(){
+
+let video=document.getElementById("video");
+
+video.pause();
+video.src="";
+
+document.getElementById("modal").style.display="none";
+
+}
+
+showMovies();
+
+</script>
+
+</body
