@@ -3,149 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MovieBox 2.0</title>
+<title>MovieBox</title>
 
 <style>
-*{box-sizing:border-box}
-
 body{
-margin:0;
-background:#080808;
-color:white;
-font-family:Arial,sans-serif
+    margin:0;
+    background:#080808;
+    color:white;
+    font-family:Arial;
 }
 
 header{
-background:#111;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:10
+    padding:15px;
+    background:#151515;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .logo{
-font-size:24px;
-font-weight:bold;
-color:#e50914
+    color:#e50914;
+    font-size:24px;
+    font-weight:bold;
 }
 
 button{
-border:0;
-border-radius:7px;
-padding:10px 14px;
-background:#e50914;
-color:white;
-font-weight:bold
+    border:0;
+    border-radius:7px;
+    padding:10px 15px;
+    background:#e50914;
+    color:white;
+    font-weight:bold;
 }
 
 .container{
-max-width:1100px;
-margin:auto;
-padding:20px
+    padding:20px;
 }
 
 .search{
-width:100%;
-padding:14px;
-border:0;
-border-radius:8px;
-background:#222;
-color:white;
-font-size:16px;
-margin-bottom:20px
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:7px;
+    background:#222;
+    color:white;
+    margin-bottom:20px;
 }
 
 .movies{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
 }
 
 .card{
-background:#151515;
-border-radius:10px;
-overflow:hidden
+    background:#151515;
+    border-radius:8px;
+    overflow:hidden;
 }
 
 .card img{
-width:100%;
-height:250px;
-object-fit:cover
+    width:100%;
+    height:240px;
+    object-fit:cover;
 }
 
 .info{
-padding:12px
-}
-
-.title{
-font-size:17px;
-font-weight:bold;
-margin-bottom:10px
-}
-
-.card button{
-width:100%;
-margin-top:5px
-}
-
-.delete{
-background:#444
+    padding:10px;
 }
 
 .modal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.9);
-z-index:20;
-padding:20px;
-overflow:auto
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.9);
+    padding:20px;
 }
 
-.box{
-max-width:650px;
-margin:30px auto;
-background:#151515;
-padding:20px;
-border-radius:10px
+.modal-box{
+    max-width:600px;
+    margin:30px auto;
+    background:#181818;
+    padding:20px;
+    border-radius:10px;
 }
 
 input{
-width:100%;
-padding:13px;
-margin:7px 0 15px;
-border:0;
-border-radius:7px;
-background:#252525;
-color:white
+    width:100%;
+    padding:12px;
+    margin:8px 0 15px;
+    border:0;
+    border-radius:6px;
+    background:#292929;
+    color:white;
 }
 
 video{
-width:100%;
-background:#000
+    width:100%;
 }
 
 .close{
-background:#444;
-margin-top:12px
+    background:#444;
+    margin-top:10px;
 }
 
-.empty{
-text-align:center;
-color:#777;
-padding:50px
-}
-
-@media(min-width:650px){
-.movies{
-grid-template-columns:repeat(4,1fr)
-}
-.card img{
-height:280px
-}
+@media(min-width:600px){
+    .movies{
+        grid-template-columns:repeat(4,1fr);
+    }
 }
 </style>
 </head>
@@ -156,19 +121,16 @@ height:280px
 
 <div class="logo">🎬 MovieBox</div>
 
-<button onclick="openAdd()">
-＋ Thêm phim
-</button>
+<button id="addButton">＋ Thêm phim</button>
 
 </header>
 
 <div class="container">
 
 <input
-class="search"
 id="search"
+class="search"
 placeholder="🔎 Tìm kiếm phim..."
-oninput="showMovies()"
 >
 
 <div id="movies" class="movies"></div>
@@ -176,61 +138,40 @@ oninput="showMovies()"
 </div>
 
 
-<!-- CỬA SỔ THÊM PHIM -->
+<!-- THÊM PHIM -->
 
 <div id="addModal" class="modal">
 
-<div class="box">
+<div class="modal-box">
 
 <h2>🎬 Thêm phim</h2>
 
-<label>Tên phim</label>
+<input id="name" placeholder="Tên phim">
 
-<input
-id="name"
-placeholder="Ví dụ: Doraemon"
->
+<input id="poster" placeholder="Link poster">
 
-<label>Link poster</label>
+<input id="video" placeholder="Link video .mp4">
 
-<input
-id="poster"
-placeholder="https://...jpg"
->
+<button id="saveButton">Thêm phim</button>
 
-<label>Link video</label>
-
-<input
-id="video"
-placeholder="https://...mp4"
->
-
-<button onclick="addMovie()">
-Thêm phim
-</button>
-
-<button class="close" onclick="closeAdd()">
-Đóng
-</button>
+<button id="closeButton" class="close">Đóng</button>
 
 </div>
 
 </div>
 
 
-<!-- CỬA SỔ XEM PHIM -->
+<!-- XEM PHIM -->
 
 <div id="watchModal" class="modal">
 
-<div class="box">
+<div class="modal-box">
 
-<h2 id="watchTitle"></h2>
+<h2 id="title"></h2>
 
 <video id="player" controls></video>
 
-<button class="close" onclick="closeWatch()">
-Đóng
-</button>
+<button id="watchClose" class="close">Đóng</button>
 
 </div>
 
@@ -239,41 +180,168 @@ Thêm phim
 
 <script>
 
-let movies =
-JSON.parse(localStorage.getItem("moviebox_movies")) || [];
+let movies = [];
 
 
-function save(){
+const addButton =
+document.getElementById("addButton");
 
-localStorage.setItem(
-"moviebox_movies",
-JSON.stringify(movies)
-);
+const addModal =
+document.getElementById("addModal");
 
-}
+const closeButton =
+document.getElementById("closeButton");
+
+const saveButton =
+document.getElementById("saveButton");
+
+const watchModal =
+document.getElementById("watchModal");
+
+
+addButton.onclick = function(){
+
+    addModal.style.display = "block";
+
+};
+
+
+closeButton.onclick = function(){
+
+    addModal.style.display = "none";
+
+};
+
+
+saveButton.onclick = function(){
+
+    let name =
+    document.getElementById("name").value;
+
+    let poster =
+    document.getElementById("poster").value;
+
+    let video =
+    document.getElementById("video").value;
+
+
+    if(
+        name === "" ||
+        poster === "" ||
+        video === ""
+    ){
+
+        alert("Hãy nhập đủ thông tin!");
+
+        return;
+
+    }
+
+
+    movies.push({
+
+        name:name,
+        poster:poster,
+        video:video
+
+    });
+
+
+    document.getElementById("name").value = "";
+    document.getElementById("poster").value = "";
+    document.getElementById("video").value = "";
+
+
+    addModal.style.display = "none";
+
+    showMovies();
+
+    alert("Đã thêm phim!");
+
+};
 
 
 function showMovies(){
 
-let box=document.getElementById("movies");
+    let box =
+    document.getElementById("movies");
 
-let keyword=
-document.getElementById("search")
-.value
-.toLowerCase();
-
-box.innerHTML="";
-
-
-let list=movies.filter(movie =>
-movie.name.toLowerCase().includes(keyword)
-);
+    let search =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
 
 
-if(list.length===0){
+    box.innerHTML = "";
 
-box.innerHTML=`
-<div class="empty">
-🎬 Chưa có phim
-<br><br>
-Bấm
+
+    movies.forEach(function(movie,index){
+
+        if(
+            movie.name
+            .toLowerCase()
+            .includes(search)
+        ){
+
+            box.innerHTML += `
+
+            <div class="card">
+
+                <img src="${movie.poster}">
+
+                <div class="info">
+
+                    <b>${movie.name}</b>
+
+                    <br><br>
+
+                    <button onclick="watch(${index})">
+                    ▶ Xem phim
+                    </button>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }
+
+    });
+
+}
+
+
+function watch(index){
+
+    let movie = movies[index];
+
+    document.getElementById("title")
+    .innerText = movie.name;
+
+    document.getElementById("player")
+    .src = movie.video;
+
+    watchModal.style.display = "block";
+
+}
+
+
+document.getElementById("watchClose").onclick =
+function(){
+
+    document.getElementById("player").pause();
+
+    watchModal.style.display = "none";
+
+};
+
+
+document.getElementById("search").oninput =
+showMovies;
+
+
+</script>
+
+</body>
+</html>
